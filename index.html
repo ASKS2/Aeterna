@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Aeterna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--tx:#c9ccd2;--hi:#e8eaee;--mu:#9a9ea6;--ln:#2a2c31;--red:#ff4a3d;--serif:'Cormorant Garamond',Georgia,'Noto Serif',serif;--sans:'Jost',system-ui,'Roboto',sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#000;color:var(--tx);font-family:var(--sans);min-height:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.screen{display:none;min-height:100vh;width:100%;max-width:480px;margin:0 auto;position:relative;padding:calc(env(safe-area-inset-top) + 20px) 24px calc(env(safe-area-inset-bottom) + 32px)}
+.screen.on{display:flex;flex-direction:column;animation:fade .5s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{margin:0;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--mu)}
+.note{margin:0;font-size:13.5px;line-height:1.6;color:#a4a8b0;font-weight:300}
+.h1{margin:0;font-family:var(--serif);font-weight:500;font-size:36px;line-height:1.1;color:var(--hi)}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.back{display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:-10px;color:var(--tx)}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:54px;border:1px solid var(--tx);border-radius:27px;background:transparent;color:#e3e5e9;font-size:15px;letter-spacing:.16em;text-transform:uppercase;transition:background .3s,color .3s,box-shadow .3s}
+.btn:hover,.btn:active{background:#d6d9de;color:#000;box-shadow:0 0 24px rgba(255,70,55,.35)}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.solid{background:var(--tx);color:#000}
+.btn.line{border-color:#4a4c52}
+.ghost{display:flex;align-items:center;justify-content:center;min-height:44px;color:var(--mu);font-size:13.5px;letter-spacing:.06em;background:none;border:0}
+.sig{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:44px;justify-content:center;margin:8px auto 0}
+.sig small{font-size:10.5px;letter-spacing:.32em;text-transform:uppercase;color:#8d9199;font-weight:300}
+.sig b{font-family:var(--serif);font-size:19px;letter-spacing:.14em;text-transform:uppercase;color:#d0d3d8;font-weight:600}
+
+/* welcome */
+#welcome{align-items:center;overflow:hidden}
+.spark{position:fixed;bottom:-10px;width:3px;height:3px;border-radius:50%;background:#ff4a3d;box-shadow:0 0 8px 2px rgba(255,60,45,.75);opacity:0;animation:float var(--t) ease-out var(--d) infinite;pointer-events:none}
+.spark.big{width:4px;height:4px}
+@keyframes float{0%{opacity:0;transform:translate(0,0) scale(1)}12%{opacity:1}100%{opacity:0;transform:translate(var(--x),-105vh) scale(.3)}}
+.logo{width:100%;max-width:420px;margin-top:8vh;animation:logoIn 2.4s cubic-bezier(.2,.7,.2,1) both,breathe 6s ease-in-out 2.4s infinite}
+.logo img{width:130%;margin:-6% -15%;display:block;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);mask-image:radial-gradient(closest-side,#000 62%,transparent 100%)}
+@keyframes logoIn{0%{opacity:0;transform:scale(.88);filter:blur(14px)}100%{opacity:1;transform:scale(1);filter:blur(0)}}
+@keyframes breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+.rise{animation:rise 1.6s ease-out both}
+@keyframes rise{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
+.tag{font-family:var(--serif);font-size:25px;line-height:1.3;font-weight:500;color:#d4d7dc;text-align:center;margin:0}
+.welcome-cta{margin-top:auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:24px}
+
+/* create */
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:12.5px;letter-spacing:.08em;color:#b9bcc3}
+.field input,.field textarea{width:100%;border:1px solid var(--ln);border-radius:12px;background:#0a0a0c;color:#e3e5e9;font-family:var(--sans);font-size:16px;padding:0 16px;outline:none}
+.field input{height:50px}
+.field textarea{min-height:92px;padding:14px 16px;resize:none;line-height:1.5}
+.field input:focus,.field textarea:focus{border-color:var(--tx)}
+.stack{display:flex;flex-direction:column;gap:18px}
+.sec{margin-top:30px}
+.tiles{display:flex;gap:10px;margin-top:14px}
+.tile{flex:1;min-height:112px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:16px;border:1px solid var(--ln);border-radius:14px;background:#0a0a0c;color:#d4d7dc;font-size:13.5px;line-height:1.35;text-align:left;transition:border-color .25s,box-shadow .25s}
+.tile:hover,.tile.on{border-color:var(--red);box-shadow:0 0 22px rgba(255,70,55,.18)}
+.tile svg{stroke:var(--tx)}
+.panel{display:flex;flex-direction:column;gap:12px;padding:18px;border:1px solid var(--ln);border-radius:14px;background:#0a0a0c;margin-top:14px}
+.panel.bad{border-color:#3a1d1b;background:#0b0606}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:#e3e5e9}
+.row span:last-child{font-size:12.5px}
+.segs{display:flex;gap:6px}
+.seg{flex:1;height:4px;border-radius:2px;background:#26282d;transition:background .4s}
+.seg.red{background:var(--red);box-shadow:0 0 8px rgba(255,70,55,.5)}
+.seg.sil{background:var(--tx)}
+.msg{margin:0;font-size:14px;line-height:1.6;color:#ffb3ac;font-weight:300}
+.perm{display:flex;flex-direction:column;gap:18px;padding:20px;border:1px solid var(--ln);border-radius:16px;background:#070708}
+.check{display:flex;gap:14px;align-items:flex-start}
+.check input{flex:none;width:22px;height:22px;margin:2px 0 0;accent-color:var(--tx)}
+.check label{font-size:14px;line-height:1.55;color:#c3c6cc;font-weight:300}
+.files{margin:0;padding:0;list-style:none;font-size:12.5px;color:#8d9199;display:flex;flex-direction:column;gap:4px}
+.hidden{display:none!important}
+
+/* call */
+#call{padding:calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 24px)}
+.video{position:relative;flex:1;min-height:440px;border-radius:28px;overflow:hidden;background:radial-gradient(ellipse at 50% 38%,#17181c 0%,#09090b 55%,#000 100%);border:1px solid #1f2024}
+.glow{position:absolute;left:50%;top:26%;width:300px;height:300px;margin-left:-150px;border-radius:50%;background:radial-gradient(circle,rgba(201,204,210,.16) 0%,rgba(201,204,210,0) 68%);animation:glow 5s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.95;transform:scale(1.06)}}
+.sil{position:absolute;left:50%;top:60px;width:300px;margin-left:-150px}
+.cname{position:absolute;left:16px;top:16px;display:flex;flex-direction:column;gap:4px}
+.cname b{font-family:var(--serif);font-size:26px;font-weight:500;color:var(--hi);line-height:1.1}
+.cname small{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#a4a8b0}
+.me{position:absolute;right:16px;top:16px;width:84px;height:112px;border-radius:14px;border:1px solid var(--ln);background:#0f1012;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;font-size:11px;color:#8d9199}
+.me video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+.wave{position:absolute;left:0;right:0;bottom:26px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.bars{display:flex;align-items:center;gap:5px;height:34px}
+.bar{width:3px;border-radius:2px;background:var(--tx);animation:talk 1.1s ease-in-out infinite}
+@keyframes talk{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+.wave span{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#8d9199;text-align:center;padding:0 24px;line-height:1.6}
+.timer{margin:18px 16px 0;display:flex;flex-direction:column;gap:10px}
+.timer .t{display:flex;justify-content:space-between;align-items:baseline}
+.timer .t span:first-child{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#a4a8b0}
+.timer .t span:last-child{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--hi)}
+.timer .t em{font-style:normal;font-size:15px;color:#8d9199}
+.track{height:3px;border-radius:2px;background:#26282d}
+.fill{height:3px;border-radius:2px;background:var(--tx);box-shadow:0 0 10px rgba(255,70,55,.55);width:100%;transition:width 1s linear}
+.up{align-self:flex-start;display:flex;align-items:center;min-height:44px;color:#ff6b5e;font-size:13.5px;letter-spacing:.04em}
+.ctls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:4px}
+.ctl{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;border:1px solid #3a3c42;background:#0b0b0d;color:#d4d7dc}
+.ctl[aria-pressed=true]{background:#d4d7dc;color:#000}
+.ctl.end{background:#d12b25;border-color:#d12b25;color:#fff;width:64px;height:64px}
+.over{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.86);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;text-align:center}
+
+/* plans */
+.card{display:flex;flex-direction:column;gap:20px;padding:24px;border-radius:20px;margin-top:20px}
+.card .big{margin:0;font-family:var(--serif);font-size:34px;font-weight:500;color:var(--hi)}
+.li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5;color:var(--tx);font-weight:300}
+.li svg{flex:none;margin-top:3px}
+.list{display:flex;flex-direction:column;gap:12px}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:52px;border-bottom:1px solid #1d1e22;font-size:15px;font-weight:300;background:none;border-left:0;border-right:0;border-top:0;color:var(--tx);width:100%;text-align:left}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 28px);transform:translate(-50%,20px);max-width:86%;padding:14px 20px;border:1px solid #4a4c52;border-radius:14px;background:#0d0d0f;color:var(--hi);font-size:14px;line-height:1.5;text-align:center;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:20}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.rec{position:fixed;inset:0;z-index:15;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px}
+.rec video{width:100%;max-width:420px;max-height:55vh;border-radius:20px;background:#0a0a0c;object-fit:cover;transform:scaleX(-1)}
+@media (prefers-reduced-motion:reduce){.logo,.rise,.spark,.glow,.bar{animation:none}.spark{opacity:.5}}
+</style>
+</head>
+<body>
+
+<!-- 1 WELCOME -->
+<main id="welcome" class="screen">
+<div id="sparks" aria-hidden="true"></div>
+<div class="logo"><img alt="Aeterna" src="logo.png"></div>
+<div class="rise" style="animation-delay:1.6s;text-align:center;margin-top:4px">
+<p class="tag">One more conversation,<br>across the quiet.</p>
+<p class="eyebrow" style="margin-top:14px;letter-spacing:.18em">Voice · Face · Memory</p>
+</div>
+<div class="welcome-cta rise" style="animation-delay:2.1s">
+<a class="btn" href="#create">Begin</a>
+<a class="ghost" href="#plans">I already have an account</a>
+<a class="sig" href="#about"><small>Powered by</small><b>The Pandit Brothers</b></a>
+</div>
+</main>
+
+<!-- 2 CREATE -->
+<main id="create" class="screen">
+<div class="top"><a class="back" href="#welcome" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><p class="eyebrow">Step 1 of 3</p><span style="width:34px"></span></div>
+<h1 class="h1">Create a presence</h1>
+<p class="note" style="margin-top:12px">Tell us who you are remembering. The more of their face, voice and manner we can learn, the more they will feel like themselves.</p>
+
+<div class="stack sec">
+<div class="field"><label for="n">Their name</label><input id="n" data-save type="text" placeholder="e.g. Dadaji" autocomplete="off"></div>
+<div class="field"><label for="r">Who were they to you?</label><input id="r" data-save type="text" placeholder="e.g. Grandfather" autocomplete="off"></div>
+</div>
+
+<div class="perm sec">
+<p class="eyebrow">Permission</p>
+<div class="check"><input id="c1" type="checkbox"><label for="c1">This person has passed away.</label></div>
+<div class="check"><input id="c2" type="checkbox"><label for="c2">I am their family, or I have the family’s permission to create this presence.</label></div>
+<div class="check"><input id="c3" type="checkbox"><label for="c3">I understand every call is an AI recreation and is clearly marked as one.</label></div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Their face</p>
+<div class="tiles">
+<button class="tile" id="t-live"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M3 8V6a3 3 0 013-3h2M16 3h2a3 3 0 013 3v2M21 16v2a3 3 0 01-3 3h-2M8 21H6a3 3 0 01-3-3v-2"/></svg>Live record</button>
+<button class="tile" id="t-vid"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.5v5l4.5-2.5z"/></svg>Old videos</button>
+<button class="tile" id="t-img"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="14" height="14" rx="2.5"/><path d="M7 21h12a2 2 0 002-2V8M3 14l4-4 5 5"/></svg>Photo collections</button>
+</div>
+<div id="facebox" class="panel bad">
+<div class="row"><span>Face recognition</span><span id="face-st" style="color:#ff6b5e">Not enough yet</span></div>
+<div class="segs" id="face-segs"><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i></div>
+<p class="msg" id="face-msg">The inputs you shared aren’t enough for us to recognise their face structure. Add a few more clear visuals, or try uploading again.</p>
+<p class="note" style="font-size:12.5px">Best results: a front-facing video of at least 30 seconds, plus clear photos from the sides, in good light, with no sunglasses or heavy filters.</p>
+<ul class="files" id="face-files"></ul>
+</div>
+</div>
+
+<div class="sec">
+<p class="eyebrow">Their voice</p>
+<div class="tiles">
+<button class="tile" id="t-mic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>Record a voice</button>
+<button class="tile" id="t-aud"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v0M8 8v8M12 4v16M16 8v8M20 12v0"/></svg>Old audio &amp; voicemails</button>
+</div>
+<div id="voicebox" class="panel bad">
+<div class="row"><span>Voice recognition</span><span id="voice-st" style="color:#ff6b5e">Not enough yet</span></div>
+<div class="segs" id="voice-segs"><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i><i class="seg"></i></div>
+<p class="msg" id="voice-msg">The voice sample isn’t long or clear enough for us to learn their voice. Record or upload a little more audio, or try again.</p>
+<p class="note" style="font-size:12.5px">Aim for at least 30 seconds of clear speech with little background noise.</p>
+<ul class="files" id="voice-files"></ul>
+</div>
+</div>
+
+<div class="stack sec">
+<p class="eyebrow">How they spoke</p>
+<div class="field"><label for="p1">Words and phrases they often said</label><textarea id="p1" data-save placeholder="Favourite sayings, blessings, jokes"></textarea></div>
+<div class="field"><label for="p2">What they called you</label><input id="p2" data-save type="text" placeholder="Nicknames, pet names"></div>
+<div class="field"><label for="p3">Languages and dialect</label><input id="p3" data-save type="text" placeholder="e.g. Punjabi, Hindi"></div>
+<div class="field"><label for="p4">Memories and things they loved</label><textarea id="p4" data-save placeholder="Stories, hobbies, people, places"></textarea></div>
+</div>
+
+<div style="margin-top:32px;display:flex;flex-direction:column;gap:10px;align-items:center">
+<a class="btn" id="go-call" href="#call" aria-disabled="true">Continue</a>
+<p class="note" id="go-hint" style="font-size:12px;text-align:center">Add their name, tick all three permissions, and share enough face and voice to continue.</p>
+</div>
+</main>
+
+<!-- 3 CALL -->
+<main id="call" class="screen">
+<div class="video">
+<div class="glow"></div>
+<svg class="sil" viewBox="0 0 300 380" role="img" aria-label="Placeholder for the loved one’s video"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9ccd2" stop-opacity=".5"/><stop offset="1" stop-color="#c9ccd2" stop-opacity="0"/></linearGradient></defs><ellipse cx="150" cy="130" rx="62" ry="78" fill="url(#g)"/><path d="M30 380c6-92 52-132 120-132s114 40 120 132z" fill="url(#g)"/></svg>
+<div class="cname"><b id="call-name">Your loved one</b><small>AI recreation · Preview</small></div>
+<div class="me" id="me"><video id="mev" autoplay muted playsinline class="hidden"></video><span id="me-l" style="position:relative">You</span></div>
+<div class="wave"><div class="bars" aria-hidden="true"><i class="bar" style="height:30px"></i><i class="bar" style="height:18px;animation-delay:.15s"></i><i class="bar" style="height:34px;animation-delay:.3s"></i><i class="bar" style="height:22px;animation-delay:.45s"></i><i class="bar" style="height:28px;animation-delay:.6s"></i><i class="bar" style="height:14px;animation-delay:.75s"></i><i class="bar" style="height:26px;animation-delay:.9s"></i></div><span>Preview — the AI video engine connects here</span></div>
+<div class="over hidden" id="paywall"><h2 class="h1" style="font-size:30px">Your 7 free minutes<br>have ended</h2><p class="note">Continue the conversation with unlimited calls.</p><a class="btn solid" href="#plans" style="max-width:300px">See plans</a><a class="ghost" href="#welcome">Back to start</a></div>
+</div>
+<div class="timer"><div class="t"><span>Free time left</span><span><span id="tleft">07:00</span> <em>/ 07:00</em></span></div><div class="track"><div class="fill" id="tfill"></div></div><a class="up" href="#plans">Keep talking without limits →</a></div>
+<div class="ctls">
+<button class="ctl" id="b-mic" aria-pressed="false" aria-label="Mute microphone"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+<a class="ctl end" href="#welcome" aria-label="End call"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14c4-4 12-4 16 0l-2.5 2.5-3-1.5v-2a9 9 0 00-3 0v2l-3 1.5z"/></svg></a>
+<button class="ctl" id="b-cam" aria-pressed="false" aria-label="Turn my camera on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10l5-3v10l-5-3"/></svg></button>
+</div>
+</main>
+
+<!-- 4 PLANS -->
+<main id="plans" class="screen">
+<div class="top"><a class="back" href="#call" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><p class="eyebrow">Plans</p><span style="width:34px"></span></div>
+<h1 class="h1">Stay as long<br>as you need.</h1>
+<p class="note" style="margin-top:12px">Begin with seven free minutes. Continue whenever you are ready.</p>
+<div class="card" style="border:1px solid var(--ln);background:#09090a">
+<div><p class="eyebrow">Free</p><p class="big">7 minutes</p><p class="note" style="font-size:13px;color:#8d9199">of video call, to start</p></div>
+<div class="list"><div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9ccd2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>One loved one</div><div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9ccd2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Face and voice from your uploads</div></div>
+<a class="btn line" href="#create">Continue free</a>
+</div>
+<div class="card" style="border:1px solid var(--red);background:#0b0707;box-shadow:0 0 40px rgba(255,70,55,.16)">
+<div><p class="eyebrow" style="color:#ff6b5e">Aeterna Eternal</p><p class="big">Unlimited calls</p><p class="note" style="font-size:13px">[PRICE] / month &nbsp;·&nbsp; [PRICE] / year</p></div>
+<div class="list">
+<div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b5e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>No time limit on video calls</div>
+<div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b5e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Several loved ones</div>
+<div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b5e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Add more videos, photos and memories any time</div>
+<div class="li"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff6b5e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Quicker, more natural replies</div>
+</div>
+<button class="btn solid" id="buy">Choose Eternal</button>
+</div>
+<p class="note" style="font-size:12px;text-align:center;margin-top:22px">Cancel any time. Your uploads stay private and can be deleted whenever you choose.</p>
+<a class="sig" href="#about" style="margin-top:20px"><small>Powered by</small><b>The Pandit Brothers</b></a>
+</main>
+
+<!-- 5 ABOUT -->
+<main id="about" class="screen">
+<div class="top"><a class="back" href="#welcome" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a><p class="eyebrow">About</p><span style="width:34px"></span></div>
+<h1 class="h1">About Aeterna</h1>
+<p class="note" style="margin-top:14px;font-size:15px;line-height:1.75;color:#b4b8bf">Aeterna gives you one more conversation with someone you have lost, using the face, voice and memories you share. Every call is marked as an AI recreation.</p>
+<div class="panel" style="margin-top:28px;padding:22px;border-radius:18px;background:#08080a">
+<p class="eyebrow">The makers</p>
+<p style="margin:0;font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#d8dbe0">The Pandit Brothers</p>
+<p class="note" style="font-size:15px;color:#b4b8bf">Anonymous</p>
+</div>
+<div style="margin-top:24px">
+<button class="nav" data-toast="Privacy policy will appear here.">Privacy and your data</button>
+<button class="nav" data-toast="Terms of use will appear here.">Terms of use</button>
+<button class="nav" id="wipe">Delete a presence and its data</button>
+<button class="nav" id="reset" style="border-bottom:0">Reset free minutes (preview only)</button>
+</div>
+<a class="sig" href="#about" style="margin-top:auto;padding-top:28px"><small>Powered by</small><b>The Pandit Brothers</b></a>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="f-vid" accept="video/*" multiple class="hidden">
+<input type="file" id="f-img" accept="image/*" multiple class="hidden">
+<input type="file" id="f-aud" accept="audio/*" multiple class="hidden">
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var ls={get:function(k,d){try{var v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}},del:function(k){try{localStorage.removeItem(k)}catch(e){}}};
+var FREE=420;
+var S={vids:[],imgs:[],auds:[],voiceSec:0};
+
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){e.classList.remove('on')},2800)}
+
+/* sparks */
+(function(){var w=$('sparks'),h='';for(var i=0;i<16;i++){var l=Math.round(Math.random()*96),d=(Math.random()*6).toFixed(1),t=(6.5+Math.random()*3).toFixed(1),x=Math.round(Math.random()*60-30);h+='<i class="spark'+(i%3===0?' big':'')+'" style="left:'+l+'%;--d:'+d+'s;--t:'+t+'s;--x:'+x+'px"></i>'}w.innerHTML=h})();
+
+/* router */
+var ids=['welcome','create','call','plans','about'];
+function route(){
+var id=(location.hash||'#welcome').slice(1);if(ids.indexOf(id)<0)id='welcome';
+ids.forEach(function(s){$(s).classList.toggle('on',s===id)});
+window.scrollTo(0,0);
+if(id==='call')startCall();else stopCall();
+if(id==='welcome')$('welcome').querySelectorAll('.rise,.logo').forEach(function(e){e.style.animation='none';void e.offsetWidth;e.style.animation=''});
+}
+window.addEventListener('hashchange',route);
+
+/* form persistence */
+document.querySelectorAll('[data-save]').forEach(function(e){e.value=ls.get('f_'+e.id,'');e.addEventListener('input',function(){ls.set('f_'+e.id,e.value);gate()})});
+['c1','c2','c3'].forEach(function(id){$(id).addEventListener('change',gate)});
+
+/* quality checks (amount-based preview) */
+function faceScore(){var s=0;if(S.vids.length)s+=2;s+=Math.min(S.imgs.length,3);return Math.min(s,5)}
+function voiceScore(){return Math.min(5,Math.floor(S.voiceSec/7.5))}
+function paint(prefix,n){var segs=$(prefix+'-segs').children,ok=n>=4;
+for(var i=0;i<5;i++){segs[i].className='seg'+(i<n?(ok?' sil':' red'):'')}
+$(prefix+'-st').textContent=ok?'Ready':(n>0?'Not enough yet':'Not enough yet');
+$(prefix+'-st').style.color=ok?'#c9ccd2':'#ff6b5e';
+$(prefix+'box').classList.toggle('bad',!ok);
+$(prefix+'-msg').classList.toggle('hidden',ok)}
+function list(id,arr){$(id).innerHTML=arr.map(function(a){return '<li>'+a.replace(/[<>&]/g,'')+'</li>'}).join('')}
+function refresh(){paint('face',faceScore());paint('voice',voiceScore());
+list('face-files',S.vids.concat(S.imgs).map(function(f){return f.name}));
+list('voice-files',S.auds.map(function(a){return a.name+' · '+Math.round(a.sec)+'s'}));gate()}
+function gate(){var ok=$('n').value.trim()&&$('c1').checked&&$('c2').checked&&$('c3').checked&&faceScore()>=4&&voiceScore()>=4;
+var b=$('go-call');b.setAttribute('aria-disabled',ok?'false':'true');b.style.opacity=ok?1:.35;b.style.pointerEvents=ok?'auto':'none';$('go-hint').classList.toggle('hidden',!!ok)}
+
+function pick(btn,input){$(btn).onclick=function(){input.click()}}
+pick('t-vid',$('f-vid'));pick('t-img',$('f-img'));pick('t-aud',$('f-aud'));
+$('f-vid').onchange=function(){for(var i=0;i<this.files.length;i++)S.vids.push({name:this.files[i].name});this.value='';refresh()};
+$('f-img').onchange=function(){for(var i=0;i<this.files.length;i++)S.imgs.push({name:this.files[i].name});this.value='';refresh()};
+$('f-aud').onchange=function(){var fs=Array.prototype.slice.call(this.files);this.value='';
+fs.forEach(function(f){var a=new Audio(),u=URL.createObjectURL(f);a.preload='metadata';
+var done=function(sec){S.auds.push({name:f.name,sec:sec});S.voiceSec+=sec;URL.revokeObjectURL(u);refresh()};
+a.onloadedmetadata=function(){done(isFinite(a.duration)?a.duration:0)};a.onerror=function(){toast('Could not read '+f.name+'. Try another file.');URL.revokeObjectURL(u)};a.src=u})};
+
+/* live record (camera) and voice record (mic) */
+function recorder(kind){
+if(!navigator.mediaDevices||!window.MediaRecorder){toast('Recording is not supported on this device. Please upload a file instead.');return}
+navigator.mediaDevices.getUserMedia(kind==='video'?{video:{facingMode:'user'},audio:true}:{audio:true}).then(function(stream){
+var o=document.createElement('div');o.className='rec';
+o.innerHTML=(kind==='video'?'<video autoplay muted playsinline></video>':'')+'<p class="eyebrow" id="rl">Recording · 0s</p><p class="note" style="text-align:center;max-width:320px">'+(kind==='video'?'Look into the camera, speak naturally, and turn your head slowly side to side.':'Read aloud or tell a story in their language, in a quiet room.')+'</p><button class="btn solid" style="max-width:260px" id="rs">Stop &amp; save</button><button class="ghost" id="rc">Cancel</button>';
+document.body.appendChild(o);if(kind==='video')o.querySelector('video').srcObject=stream;
+var mr=new MediaRecorder(stream),t0=Date.now(),keep=true,iv=setInterval(function(){var s=Math.round((Date.now()-t0)/1000);$('rl').textContent='Recording · '+s+'s';if(s>=90)mr.stop()},500);
+mr.onstop=function(){clearInterval(iv);stream.getTracks().forEach(function(t){t.stop()});o.remove();var sec=(Date.now()-t0)/1000;if(!keep)return;
+if(kind==='video'){S.vids.push({name:'Live recording · '+Math.round(sec)+'s'})}else{S.auds.push({name:'Voice recording',sec:sec});S.voiceSec+=sec}refresh()};
+$('rs').onclick=function(){mr.stop()};$('rc').onclick=function(){keep=false;mr.stop()};mr.start();
+}).catch(function(){toast('Camera or microphone permission was not granted.')})}
+$('t-live').onclick=function(){recorder('video')};$('t-mic').onclick=function(){recorder('audio')};
+
+/* call + free-minute timer */
+var tick=null,cam=null;
+function left(){return Math.max(0,parseInt(ls.get('free_left',String(FREE)),10)||0)}
+function paintTimer(){var l=left(),m=('0'+Math.floor(l/60)).slice(-2),s=('0'+(l%60)).slice(-2);$('tleft').textContent=m+':'+s;$('tfill').style.width=(l/FREE*100)+'%';$('paywall').classList.toggle('hidden',l>0)}
+function startCall(){$('call-name').textContent=$('n').value.trim()||'Your loved one';paintTimer();clearInterval(tick);
+if(left()>0)tick=setInterval(function(){var l=left()-1;ls.set('free_left',String(l));paintTimer();if(l<=0)clearInterval(tick)},1000)}
+function stopCall(){clearInterval(tick);camOff()}
+function camOff(){if(cam){cam.getTracks().forEach(function(t){t.stop()});cam=null}$('mev').classList.add('hidden');$('me-l').classList.remove('hidden');$('b-cam').setAttribute('aria-pressed','false')}
+$('b-mic').onclick=function(){var p=this.getAttribute('aria-pressed')==='true';this.setAttribute('aria-pressed',p?'false':'true');this.setAttribute('aria-label',p?'Mute microphone':'Unmute microphone')};
+$('b-cam').onclick=function(){if(cam){camOff();return}
+if(!navigator.mediaDevices){toast('Camera is not available on this device.');return}
+navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(s){cam=s;$('mev').srcObject=s;$('mev').classList.remove('hidden');$('me-l').classList.add('hidden');$('b-cam').setAttribute('aria-pressed','true')}).catch(function(){toast('Camera permission was not granted.')})};
+
+$('buy').onclick=function(){toast('Payments are not connected yet. Subscriptions will be available at launch.')};
+document.querySelectorAll('[data-toast]').forEach(function(b){b.onclick=function(){toast(b.getAttribute('data-toast'))}});
+$('reset').onclick=function(){ls.set('free_left',String(FREE));toast('Free minutes reset to 7:00.')};
+$('wipe').onclick=function(){if(!confirm('Delete everything you entered on this device?'))return;S={vids:[],imgs:[],auds:[],voiceSec:0};document.querySelectorAll('[data-save]').forEach(function(e){e.value='';ls.del('f_'+e.id)});['c1','c2','c3'].forEach(function(i){$(i).checked=false});refresh();toast('Deleted from this device.')};
+
+refresh();route();
+})();
+</script>
+</body>
+</html>
